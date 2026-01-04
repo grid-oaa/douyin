@@ -1,0 +1,279 @@
+{
+  "info": {
+    "name": "Douyin Live Recorder API",
+    "description": "抖音直播视频提取器 API 测试集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "taskId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. 开始录制",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 保存taskId到环境变量",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"taskId\", jsonData.taskId);",
+              "    console.log(\"TaskId saved: \" + jsonData.taskId);",
+              "}",
+              "",
+              "// 验证响应",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has taskId\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('taskId');",
+              "    pm.expect(jsonData).to.have.property('douyinId');",
+              "    pm.expect(jsonData).to.have.property('status');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"douyinId\": \"w2511839220\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/recordings/start",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recordings", "start"]
+        },
+        "description": "开始录制指定抖音号的直播。\n\n**请求参数：**\n- douyinId: 抖音号（必填）\n\n**响应：**\n- taskId: 任务ID（用于后续查询和停止）\n- status: 任务状态（PENDING, DETECTING, RECORDING等）"
+      },
+      "response": []
+    },
+    {
+      "name": "2. 查询录制状态",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has status\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('taskId');",
+              "    pm.expect(jsonData).to.have.property('status');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/recordings/{{taskId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recordings", "{{taskId}}", "status"]
+        },
+        "description": "查询指定任务的录制状态和进度。\n\n**路径参数：**\n- taskId: 任务ID（从开始录制接口获取）\n\n**响应：**\n- status: 当前状态\n- progress: 录制进度（时长、文件大小、比特率）"
+      },
+      "response": []
+    },
+    {
+      "name": "3. 列出所有录制任务",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is array\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/recordings",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recordings"]
+        },
+        "description": "获取所有活动的录制任务列表。\n\n**响应：**\n- 返回所有任务的数组，包含每个任务的详细信息"
+      },
+      "response": []
+    },
+    {
+      "name": "4. 停止录制",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('success');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/recordings/{{taskId}}/stop",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recordings", "{{taskId}}", "stop"]
+        },
+        "description": "停止指定的录制任务。\n\n**路径参数：**\n- taskId: 任务ID\n\n**响应：**\n- success: 是否成功停止\n- message: 操作结果消息"
+      },
+      "response": []
+    },
+    {
+      "name": "5. 健康检查",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Health status is UP\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql('UP');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["actuator", "health"]
+        },
+        "description": "检查系统健康状态，包括FFmpeg和存储空间。\n\n**响应：**\n- status: 整体状态（UP/DOWN）\n- components: 各组件状态（ffmpeg, storage）"
+      },
+      "response": []
+    },
+    {
+      "name": "错误测试 - 无效抖音号",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Error message in Chinese\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "    pm.expect(jsonData.message).to.include('抖音号');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"douyinId\": \"@invalid#user\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/recordings/start",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recordings", "start"]
+        },
+        "description": "测试无效抖音号的错误处理。\n\n**预期结果：**\n- HTTP 400 Bad Request\n- 中文错误消息"
+      },
+      "response": []
+    },
+    {
+      "name": "错误测试 - 空抖音号",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"douyinId\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/recordings/start",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recordings", "start"]
+        },
+        "description": "测试空抖音号的错误处理。\n\n**预期结果：**\n- HTTP 400 Bad Request"
+      },
+      "response": []
+    }
+  ]
+}

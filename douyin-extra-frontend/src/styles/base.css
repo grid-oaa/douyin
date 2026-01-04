@@ -1,0 +1,42 @@
+:root {
+  font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  color: #1b1b1b;
+  background-color: #f7f7f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  padding: 20px 24px;
+  background: linear-gradient(120deg, #fbe9d0, #f6f6ff);
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.app-main {
+  flex: 1;
+  padding: 24px;
+}
+
+.page-tip {
+  margin: 0;
+  font-size: 14px;
+  color: #5a5a5a;
+}

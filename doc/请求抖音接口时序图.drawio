@@ -1,0 +1,186 @@
+<mxfile host="easy-draw-frontend.onrender.com" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
+  <diagram id="Ezw0wwuVKHkceych01qt" name="第 1 页">
+    <mxGraphModel dx="2499" dy="1884" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="用户" vertex="1">
+          <mxGeometry height="2031" width="150" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="后端" vertex="1">
+          <mxGeometry height="2031" width="150" x="241" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="抖音接口" vertex="1">
+          <mxGeometry height="2031" width="150" x="723" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="录制服务" vertex="1">
+          <mxGeometry height="2031" width="150" x="923" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#111111;height=20;width=30;fillColor=#FFFFFF;fontColor=#111111;strokeWidth=2;rounded=0;" value="alt" vertex="1">
+          <mxGeometry height="503" width="251" x="192" y="411" as="geometry" />
+        </mxCell>
+        <mxCell id="7" parent="6" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[Cookie 优先级]" vertex="1">
+          <mxGeometry height="20" width="221" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8" parent="6" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" value="" vertex="1">
+          <mxGeometry width="251" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="9" parent="6" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" value="" vertex="1">
+          <mxGeometry width="251" y="348" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#111111;height=20;width=30;fillColor=#FFFFFF;fontColor=#111111;strokeWidth=2;rounded=0;" value="alt" vertex="1">
+          <mxGeometry height="194" width="173" x="331" y="1426" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="10" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[解析成功]" vertex="1">
+          <mxGeometry height="20" width="143" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="10" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" value="[解析失败]" vertex="1">
+          <mxGeometry height="4" width="173" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#111111;height=20;width=30;fillColor=#FFFFFF;fontColor=#111111;strokeWidth=2;rounded=0;" value="alt" vertex="1">
+          <mxGeometry height="533" width="398" x="209" y="1194" as="geometry" />
+        </mxCell>
+        <mxCell id="14" parent="13" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[流地址存在]" vertex="1">
+          <mxGeometry height="20" width="368" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="15" parent="13" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" value="[流地址不存在]" vertex="1">
+          <mxGeometry height="4" width="398" y="441" as="geometry" />
+        </mxCell>
+        <mxCell id="16" edge="1" parent="1" source="2" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;" target="3" value="发起录制请求(含抖音号)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="204" y="111" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="17" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="基本校验与任务评估">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="163" />
+              <mxPoint x="367" y="193" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="18" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="组装请求头">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="294" />
+              <mxPoint x="367" y="324" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="19" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="运行时更新 (/api/config/cookie)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="495" />
+              <mxPoint x="367" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="20" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="配置文件 cookie 文件">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="655" />
+              <mxPoint x="367" y="685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="21" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="配置项 douyin.cookie">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="815" />
+              <mxPoint x="367" y="845" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="22" edge="1" parent="1" source="3" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;" target="4" value="GET https://live.douyin.com/webcast/room/web/enter/&#xa;?aid=6383&amp;web_rid={抖音号}">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="566" y="983" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="23" edge="1" parent="1" source="4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;" target="3" value="返回直播间 JSON 数据">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="569" y="1088" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="24" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="解析响应 JSON">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="1144" />
+              <mxPoint x="367" y="1174" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="25" edge="1" parent="1" source="3" style="curved=1;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" target="3" value="优先取 FLV 流 (flv_pull_url)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="367" y="1278" />
+              <mxPoint x="367" y="1308" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="26" edge="1" parent="1" source="3" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;" target="5" value="传递流地址 stream_url">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="666" y="1773" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="27" edge="1" parent="1" source="5" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;" target="3" value="录制状态更新">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="669" y="1874" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="28" edge="1" parent="1" source="3" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;" target="2" value="返回任务结果">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="207" y="1926" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="29" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="校验通过，创建任务" vertex="1">
+          <mxGeometry height="49" width="165" x="341" y="213" as="geometry" />
+        </mxCell>
+        <mxCell id="30" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="包含 User-Agent&#xa;按优先级获取 Cookie" vertex="1">
+          <mxGeometry height="67" width="172" x="341" y="344" as="geometry" />
+        </mxCell>
+        <mxCell id="31" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="优先级 1" vertex="1">
+          <mxGeometry height="49" width="150" x="241" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="32" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="优先级 2" vertex="1">
+          <mxGeometry height="49" width="150" x="241" y="705" as="geometry" />
+        </mxCell>
+        <mxCell id="33" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="优先级 3" vertex="1">
+          <mxGeometry height="49" width="150" x="241" y="865" as="geometry" />
+        </mxCell>
+        <mxCell id="34" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="请求带必要头信息" vertex="1">
+          <mxGeometry height="49" width="150" x="623" y="1003" as="geometry" />
+        </mxCell>
+        <mxCell id="35" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="若无，则取 HLS 流 (hls_pull_url)" vertex="1">
+          <mxGeometry height="49" width="256" x="341" y="1328" as="geometry" />
+        </mxCell>
+        <mxCell id="36" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="优先选择最高画质 URL" vertex="1">
+          <mxGeometry height="49" width="182" x="341" y="1377" as="geometry" />
+        </mxCell>
+        <mxCell id="37" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="获取到 stream_url" vertex="1">
+          <mxGeometry height="49" width="153" x="341" y="1474" as="geometry" />
+        </mxCell>
+        <mxCell id="38" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="流地址获取失败" vertex="1">
+          <mxGeometry height="49" width="150" x="341" y="1571" as="geometry" />
+        </mxCell>
+        <mxCell id="39" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="流地址获取失败" vertex="1">
+          <mxGeometry height="49" width="150" x="341" y="1678" as="geometry" />
+        </mxCell>
+        <mxCell id="40" parent="1" style="fillColor=#FFFFFF;strokeColor=#111111;fontColor=#111111;strokeWidth=2;rounded=0;" value="使用 FFmpeg 拉流录制" vertex="1">
+          <mxGeometry height="49" width="184" x="1023" y="1793" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
