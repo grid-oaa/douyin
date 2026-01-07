@@ -158,6 +158,39 @@ public class FileSystemManager {
     public String getFullPath(String filename) {
         return Paths.get(storagePath, filename).toString();
     }
+
+    /**
+     * 基于指定目录生成完整文件路径
+     *
+     * @param baseDir 输出目录
+     * @param filename 文件名
+     * @return 完整路径
+     */
+    public String getFullPath(String baseDir, String filename) {
+        return Paths.get(baseDir, filename).toString();
+    }
+
+    /**
+     * 校验目录是否可写（必要时创建目录）
+     *
+     * @param path 目录路径
+     * @return 可写返回true，否则返回false
+     */
+    public boolean isWritableDirectory(String path) {
+        if (!ensureDirectory(path)) {
+            return false;
+        }
+        Path dirPath = Paths.get(path);
+        if (!Files.isDirectory(dirPath)) {
+            logger.error("路径不是目录: {}", path);
+            return false;
+        }
+        if (!Files.isWritable(dirPath)) {
+            logger.error("目录不可写: {}", path);
+            return false;
+        }
+        return true;
+    }
     
     /**
      * 获取存储路径

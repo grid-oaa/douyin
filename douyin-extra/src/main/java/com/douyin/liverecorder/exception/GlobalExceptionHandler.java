@@ -111,6 +111,24 @@ public class GlobalExceptionHandler {
         
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorResponse);
     }
+
+    /**
+     * 处理保存目录异常
+     */
+    @ExceptionHandler(SaveDirException.class)
+    public ResponseEntity<ErrorResponse> handleSaveDirException(
+            SaveDirException ex, HttpServletRequest request) {
+        logger.warn("保存目录校验失败: code={}, message={}", ex.getCode(), ex.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.BAD_REQUEST.value(),
+            ex.getCode(),
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
     
     /**
      * 处理验证异常（Bean Validation）

@@ -200,7 +200,7 @@ java -jar target/douyin-live-recorder-1.0.0.jar
 ```bash
 curl -X POST http://localhost:8080/api/recordings/start \
   -H "Content-Type: application/json" \
-  -d '{"douyinId": "w2511839220"}'
+  -d '{"douyinId": "w2511839220", "outputDir": "D:\\recordings"}'
 ```
 
 ### 3. 查询状态
@@ -214,7 +214,7 @@ curl -X POST http://localhost:8080/api/recordings/{taskId}/stop
 ```
 
 ### 5. 查看录制文件
-录制完成的文件位于：`./recordings/` 目录
+录制完成的文件位于：请求中 `outputDir` 指定的目录
 
 ---
 

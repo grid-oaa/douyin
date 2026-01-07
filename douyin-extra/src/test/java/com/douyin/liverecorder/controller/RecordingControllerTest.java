@@ -2,8 +2,7 @@ package com.douyin.liverecorder.controller;
 
 import com.douyin.liverecorder.dto.RecordingResponse;
 import com.douyin.liverecorder.dto.StartRecordingRequest;
-import com.douyin.liverecorder.exception.ConcurrentLimitException;
-import com.douyin.liverecorder.exception.InvalidDouyinIdException;
+import com.douyin.liverecorder.infrastructure.FileSystemManager;
 import com.douyin.liverecorder.model.RecordingStatus;
 import com.douyin.liverecorder.model.RecordingTask;
 import com.douyin.liverecorder.model.TaskStatus;
@@ -28,8 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * RecordingController??????
- * ???????PI??????????????????????????
+ * RecordingController 单元测试
  */
 @WebMvcTest(RecordingController.class)
 class RecordingControllerTest {
@@ -42,30 +40,28 @@ class RecordingControllerTest {
     
     @MockBean
     private RecordingManager recordingManager;
+
+    @MockBean
+    private FileSystemManager fileSystemManager;
     
     private RecordingTask testTask;
     
     @BeforeEach
     void setUp() {
-        // ?????????
         testTask = new RecordingTask("test123");
         testTask.setStatus(TaskStatus.PENDING);
         testTask.setStartTime(LocalDateTime.now());
     }
     
-    /**
-     * ??????????- ??????
-     */
     @Test
     void testStartRecording_Success() throws Exception {
-        // ?????????
         StartRecordingRequest request = new StartRecordingRequest("test123");
+        request.setOutputDir("D:\\recordings");
         
-        // Mock RecordingManager???
-        when(recordingManager.createTask(anyString(), anyBoolean())).thenReturn(testTask);
+        when(fileSystemManager.isWritableDirectory(anyString())).thenReturn(true);
+        when(recordingManager.createTask(anyString(), anyBoolean(), anyString())).thenReturn(testTask);
         when(recordingManager.startTask(anyString())).thenReturn(true);
         
-        // ??????????????
         mockMvc.perform(post("/api/recordings/start")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -75,140 +71,125 @@ class RecordingControllerTest {
                 .andExpect(jsonPath("$.status").value("PENDING"));
     }
     
-    /**
-     * ??????????- ??????
-     */
     @Test
     void testStartRecording_EmptyDouyinId() throws Exception {
-        // ????????? - ??????
         StartRecordingRequest request = new StartRecordingRequest("");
+        request.setOutputDir("D:\\recordings");
         
-        // ??????????????
         mockMvc.perform(post("/api/recordings/start")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
     
-    /**
-     * ??????????- ???????????
-     */
     @Test
     void testStartRecording_InvalidDouyinIdFormat() throws Exception {
-        // ????????? - ???????????????
         StartRecordingRequest request = new StartRecordingRequest("@invalid!");
+        request.setOutputDir("D:\\recordings");
         
-        // ??????????????
         mockMvc.perform(post("/api/recordings/start")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
     
-    /**
-     * ??????????- ?????????
-     */
     @Test
     void testStartRecording_ConcurrentLimitReached() throws Exception {
-        // ?????????
         StartRecordingRequest request = new StartRecordingRequest("test123");
+        request.setOutputDir("D:\\recordings");
         
-        // Mock RecordingManager??? - ????????????
-        when(recordingManager.createTask(anyString(), anyBoolean()))
-                .thenThrow(new IllegalStateException("?????????????????????????????"));
+        when(fileSystemManager.isWritableDirectory(anyString())).thenReturn(true);
+        when(recordingManager.createTask(anyString(), anyBoolean(), anyString()))
+                .thenThrow(new IllegalStateException("当前录制任务已达上限（5个），请稍后重试"));
         
-        // ??????????????
         mockMvc.perform(post("/api/recordings/start")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isTooManyRequests())
-                .andExpect(jsonPath("$.message").value("?????????????????????????????"));
+                .andExpect(jsonPath("$.message").value("当前录制任务已达上限（5个），请稍后重试"));
+    }
+
+    @Test
+    void testStartRecording_SaveDirRequired() throws Exception {
+        StartRecordingRequest request = new StartRecordingRequest("test123");
+
+        mockMvc.perform(post("/api/recordings/start")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("SAVE_DIR_REQUIRED"));
+    }
+
+    @Test
+    void testStartRecording_SaveDirInvalid() throws Exception {
+        StartRecordingRequest request = new StartRecordingRequest("test123");
+        request.setOutputDir("D:\\invalid");
+
+        when(fileSystemManager.isWritableDirectory(anyString())).thenReturn(false);
+
+        mockMvc.perform(post("/api/recordings/start")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("SAVE_DIR_INVALID"));
     }
     
-    /**
-     * ????????? - ??????
-     */
     @Test
     void testStopRecording_Success() throws Exception {
-        // ?????????
         String taskId = testTask.getTaskId();
         testTask.setStatus(TaskStatus.CANCELLED);
         testTask.setEndTime(LocalDateTime.now());
         
-        // Mock RecordingManager???
         when(recordingManager.stopTask(taskId)).thenReturn(true);
         when(recordingManager.getTaskStatus(taskId)).thenReturn(createRecordingStatus(testTask));
         when(recordingManager.getTask(taskId)).thenReturn(testTask);
         
-        // ??????????????
         mockMvc.perform(post("/api/recordings/{taskId}/stop", taskId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskId").value(taskId))
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
     }
     
-    /**
-     * ????????? - ????????
-     */
     @Test
     void testStopRecording_TaskNotFound() throws Exception {
-        // ?????????
         String taskId = "nonexistent";
         
-        // Mock RecordingManager??? - ??????????????
         when(recordingManager.stopTask(taskId))
-                .thenThrow(new IllegalArgumentException("???????? " + taskId));
+                .thenThrow(new IllegalArgumentException("任务不存在 " + taskId));
         
-        // ??????????????
         mockMvc.perform(post("/api/recordings/{taskId}/stop", taskId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("???????? " + taskId));
+                .andExpect(jsonPath("$.message").value("任务不存在 " + taskId));
     }
     
-    /**
-     * ?????????????- ??????
-     */
     @Test
     void testGetRecordingStatus_Success() throws Exception {
-        // ?????????
         String taskId = testTask.getTaskId();
         testTask.setStatus(TaskStatus.RECORDING);
         RecordingStatus status = createRecordingStatus(testTask);
         
-        // Mock RecordingManager???
         when(recordingManager.getTaskStatus(taskId)).thenReturn(status);
         
-        // ??????????????
         mockMvc.perform(get("/api/recordings/{taskId}/status", taskId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskId").value(taskId))
                 .andExpect(jsonPath("$.status").value("RECORDING"));
     }
     
-    /**
-     * ?????????????- ????????
-     */
     @Test
     void testGetRecordingStatus_TaskNotFound() throws Exception {
-        // ?????????
         String taskId = "nonexistent";
         
-        // Mock RecordingManager??? - ??????????????
         when(recordingManager.getTaskStatus(taskId))
-                .thenThrow(new IllegalArgumentException("???????? " + taskId));
+                .thenThrow(new IllegalArgumentException("任务不存在 " + taskId));
         
-        // ??????????????
         mockMvc.perform(get("/api/recordings/{taskId}/status", taskId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("???????? " + taskId));
+                .andExpect(jsonPath("$.message").value("任务不存在 " + taskId));
     }
     
-    /**
-     * ????????????????- ??????
-     */
     @Test
     void testListRecordings_Success() throws Exception {
-        // ?????????
         RecordingTask task1 = new RecordingTask("test123");
         task1.setStatus(TaskStatus.RECORDING);
         
@@ -217,10 +198,8 @@ class RecordingControllerTest {
         
         List<RecordingTask> tasks = Arrays.asList(task1, task2);
         
-        // Mock RecordingManager???
         when(recordingManager.listActiveTasks()).thenReturn(tasks);
         
-        // ??????????????
         mockMvc.perform(get("/api/recordings"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -230,46 +209,30 @@ class RecordingControllerTest {
                 .andExpect(jsonPath("$[1].status").value("DETECTING"));
     }
     
-    /**
-     * ????????????????- ?????
-     */
     @Test
     void testListRecordings_EmptyList() throws Exception {
-        // Mock RecordingManager??? - ????????
         when(recordingManager.listActiveTasks()).thenReturn(Arrays.asList());
         
-        // ??????????????
         mockMvc.perform(get("/api/recordings"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
     }
     
-    /**
-     * ????????? - ????????
-     */
     @Test
     void testStartRecording_MissingRequestBody() throws Exception {
-        // ??????????????
         mockMvc.perform(post("/api/recordings/start")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
     
-    /**
-     * ????????? - ?????SON???
-     */
     @Test
     void testStartRecording_InvalidJson() throws Exception {
-        // ??????????????
         mockMvc.perform(post("/api/recordings/start")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{invalid json}"))
                 .andExpect(status().isBadRequest());
     }
     
-    /**
-     * ???????????ecordingStatus???
-     */
     private RecordingStatus createRecordingStatus(RecordingTask task) {
         RecordingStatus status = new RecordingStatus();
         status.setTaskId(task.getTaskId());

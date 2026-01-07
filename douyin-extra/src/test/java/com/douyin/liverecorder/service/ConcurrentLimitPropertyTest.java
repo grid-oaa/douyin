@@ -26,7 +26,7 @@ class ConcurrentLimitPropertyTest {
 
         List<RecordingTask> tasks = new ArrayList<>();
         for (int i = 0; i < maxConcurrentTasks; i++) {
-            RecordingTask task = manager.createTask("user" + i, false);
+            RecordingTask task = manager.createTask("user" + i, false, "D:\\recordings");
             task.setStatus(TaskStatus.RECORDING);
             tasks.add(task);
         }
@@ -35,7 +35,7 @@ class ConcurrentLimitPropertyTest {
 
         for (int i = 0; i < extraTasks; i++) {
             final int index = i;
-            assertThatThrownBy(() -> manager.createTask("extraUser" + index, false))
+            assertThatThrownBy(() -> manager.createTask("extraUser" + index, false, "D:\\recordings"))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("concurrent limit")
                 .hasMessageContaining(String.valueOf(maxConcurrentTasks));
@@ -55,12 +55,12 @@ class ConcurrentLimitPropertyTest {
 
         List<RecordingTask> tasks = new ArrayList<>();
         for (int i = 0; i < maxConcurrentTasks; i++) {
-            RecordingTask task = manager.createTask("user" + i, false);
+            RecordingTask task = manager.createTask("user" + i, false, "D:\\recordings");
             task.setStatus(TaskStatus.RECORDING);
             tasks.add(task);
         }
 
-        assertThatThrownBy(() -> manager.createTask("extraUser", false))
+        assertThatThrownBy(() -> manager.createTask("extraUser", false, "D:\\recordings"))
             .isInstanceOf(IllegalStateException.class);
 
         for (int i = 0; i < actualTasksToComplete; i++) {
@@ -69,14 +69,14 @@ class ConcurrentLimitPropertyTest {
 
         List<RecordingTask> newTasks = new ArrayList<>();
         for (int i = 0; i < actualTasksToComplete; i++) {
-            RecordingTask newTask = manager.createTask("newUser" + i, false);
+            RecordingTask newTask = manager.createTask("newUser" + i, false, "D:\\recordings");
             newTask.setStatus(TaskStatus.RECORDING);
             newTasks.add(newTask);
         }
 
         assertThat(newTasks).hasSize(actualTasksToComplete);
 
-        assertThatThrownBy(() -> manager.createTask("anotherExtraUser", false))
+        assertThatThrownBy(() -> manager.createTask("anotherExtraUser", false, "D:\\recordings"))
             .isInstanceOf(IllegalStateException.class);
     }
 
@@ -88,11 +88,11 @@ class ConcurrentLimitPropertyTest {
         MockRecordingManager manager = new MockRecordingManager(maxConcurrentTasks);
 
         for (int i = 0; i < maxConcurrentTasks; i++) {
-            RecordingTask task = manager.createTask("user" + i, false);
+            RecordingTask task = manager.createTask("user" + i, false, "D:\\recordings");
             task.setStatus(TaskStatus.RECORDING);
         }
 
-        assertThatThrownBy(() -> manager.createTask("extraUser", false))
+        assertThatThrownBy(() -> manager.createTask("extraUser", false, "D:\\recordings"))
             .isInstanceOf(IllegalStateException.class)
             .hasMessageContaining("concurrent limit")
             .hasMessageContaining(String.valueOf(maxConcurrentTasks));
@@ -108,24 +108,24 @@ class ConcurrentLimitPropertyTest {
         List<RecordingTask> tasks = new ArrayList<>();
         int activeCount = maxConcurrentTasks / 2;
         for (int i = 0; i < activeCount; i++) {
-            RecordingTask task = manager.createTask("activeUser" + i, false);
+            RecordingTask task = manager.createTask("activeUser" + i, false, "D:\\recordings");
             task.setStatus(TaskStatus.RECORDING);
             tasks.add(task);
         }
 
         for (int i = 0; i < 5; i++) {
-            RecordingTask task = manager.createTask("completedUser" + i, false);
+            RecordingTask task = manager.createTask("completedUser" + i, false, "D:\\recordings");
             task.setStatus(TaskStatus.COMPLETED);
             tasks.add(task);
         }
 
         int remainingSlots = maxConcurrentTasks - activeCount;
         for (int i = 0; i < remainingSlots; i++) {
-            RecordingTask task = manager.createTask("newUser" + i, false);
+            RecordingTask task = manager.createTask("newUser" + i, false, "D:\\recordings");
             assertThat(task).isNotNull();
         }
 
-        assertThatThrownBy(() -> manager.createTask("extraUser", false))
+        assertThatThrownBy(() -> manager.createTask("extraUser", false, "D:\\recordings"))
             .isInstanceOf(IllegalStateException.class);
     }
 
@@ -138,7 +138,7 @@ class ConcurrentLimitPropertyTest {
             this.maxConcurrentTasks = maxConcurrentTasks;
         }
 
-        public RecordingTask createTask(String douyinId, boolean autoEnabled) {
+        public RecordingTask createTask(String douyinId, boolean autoEnabled, String outputDir) {
             if (douyinId == null || douyinId.trim().isEmpty()) {
                 throw new IllegalArgumentException("douyinId must not be blank");
             }
@@ -155,6 +155,7 @@ class ConcurrentLimitPropertyTest {
 
             RecordingTask task = new RecordingTask(douyinId);
             task.setAutoEnabled(autoEnabled);
+            task.setOutputDir(outputDir);
             task.setStatus(TaskStatus.PENDING);
             taskMap.put(task.getTaskId(), task);
             return task;

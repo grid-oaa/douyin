@@ -7,6 +7,7 @@ import RecordingDetail from '../components/RecordingDetail.vue'
 import StatusBadge from '../components/StatusBadge.vue'
 import { isTerminalStatus } from '../constants/recording'
 import { useRecordingStore } from '../stores/recording'
+import { getLastOutputDir } from '../utils/storage'
 
 const store = useRecordingStore()
 
@@ -26,13 +27,49 @@ const selectedStatus = computed(() =>
 const loading = computed(() => store.loading)
 const isStartDisabled = computed(() => loading.value || !douyinId.value.trim())
 
+async function pickOutputDir(): Promise<string | null> {
+  // 使用上次目录作为默认选择
+  const lastDir = getLastOutputDir()
+  if (lastDir) {
+    const reuse = window.confirm(`是否继续使用上次保存目录：${lastDir}？`)
+    if (reuse) {
+      return lastDir
+    }
+  }
+
+  const picker = (window as Window & {
+    showDirectoryPicker?: () => Promise<{ name: string }>
+  }).showDirectoryPicker
+
+  if (!picker) {
+    validationMessage.value = '当前浏览器不支持目录选择'
+    return null
+  }
+
+  try {
+    const handle = await picker()
+    return handle.name
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      validationMessage.value = '已取消选择保存目录'
+    } else {
+      validationMessage.value = '选择保存目录失败'
+    }
+    return null
+  }
+}
+
 async function handleStart() {
   validationMessage.value = ''
   if (!douyinId.value.trim()) {
     validationMessage.value = '请输入抖音号'
     return
   }
-  await store.startRecording(douyinId.value.trim(), auto.value)
+  const outputDir = await pickOutputDir()
+  if (!outputDir) {
+    return
+  }
+  await store.startRecording(douyinId.value.trim(), auto.value, outputDir)
 }
 
 function handleOpen(taskId: string) {
@@ -84,7 +121,7 @@ onBeforeUnmount(() => {
         <p class="section-tip">管理录制任务、查看状态与详情。</p>
       </div>
       <button class="ghost-btn" type="button" :disabled="loading" @click="refreshList">
-        {{ loading ? '刷新中...' : '刷新列表' }}
+        {{ loading ? '刷新中..' : '刷新列表' }}
       </button>
     </div>
 
@@ -278,3 +315,7 @@ onBeforeUnmount(() => {
   }
 }
 </style>
+
+
+
+

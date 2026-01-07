@@ -2,6 +2,8 @@ package com.douyin.liverecorder.controller;
 
 import com.douyin.liverecorder.dto.RecordingResponse;
 import com.douyin.liverecorder.dto.StartRecordingRequest;
+import com.douyin.liverecorder.exception.SaveDirException;
+import com.douyin.liverecorder.infrastructure.FileSystemManager;
 import com.douyin.liverecorder.model.RecordingStatus;
 import com.douyin.liverecorder.model.RecordingTask;
 import com.douyin.liverecorder.service.RecordingManager;
@@ -27,11 +29,13 @@ public class RecordingController {
     private static final Logger logger = LoggerFactory.getLogger(RecordingController.class);
     
     private final RecordingManager recordingManager;
+    private final FileSystemManager fileSystemManager;
     @Value("${recording.auto-enabled:true}")
     private boolean defaultAutoEnabled;
     
-    public RecordingController(RecordingManager recordingManager) {
+    public RecordingController(RecordingManager recordingManager, FileSystemManager fileSystemManager) {
         this.recordingManager = recordingManager;
+        this.fileSystemManager = fileSystemManager;
     }
     
     /**
@@ -46,11 +50,20 @@ public class RecordingController {
             @Valid @RequestBody StartRecordingRequest request) {
         
         boolean autoEnabled = request.getAuto() != null ? request.getAuto() : defaultAutoEnabled;
+        String outputDir = request.getOutputDir();
 
-        logger.info("收到开始录制请求: douyinId={}, auto={}", request.getDouyinId(), autoEnabled);
+        logger.info("收到开始录制请求: douyinId={}, auto={}, outputDir={}",
+                request.getDouyinId(), autoEnabled, outputDir);
+        
+        if (outputDir == null || outputDir.trim().isEmpty()) {
+            throw new SaveDirException("SAVE_DIR_REQUIRED", "保存目录不能为空");
+        }
+        if (!fileSystemManager.isWritableDirectory(outputDir)) {
+            throw new SaveDirException("SAVE_DIR_INVALID", "保存目录不可用");
+        }
         
         // 创建任务
-        RecordingTask task = recordingManager.createTask(request.getDouyinId(), autoEnabled);
+        RecordingTask task = recordingManager.createTask(request.getDouyinId(), autoEnabled, outputDir);
         
         // 启动任务
         recordingManager.startTask(task.getTaskId());

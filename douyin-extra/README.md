@@ -77,7 +77,7 @@ Started LiveRecorderApplication in X.XXX seconds
 ```bash
 curl -X POST http://localhost:8080/api/recordings/start \
   -H "Content-Type: application/json" \
-  -d '{"douyinId": "w2511839220"}'
+  -d '{"douyinId": "w2511839220", "outputDir": "D:\\recordings"}'
 ```
 
 **响应：**

@@ -32,6 +32,11 @@ public class RecordingTask {
      * 输出文件路径
      */
     private String outputPath;
+    
+    /**
+     * 保存目录
+     */
+    private String outputDir;
 
     /**
      * 录制临时文件路径（例如 .flv）
@@ -125,6 +130,14 @@ public class RecordingTask {
     
     public void setOutputPath(String outputPath) {
         this.outputPath = outputPath;
+    }
+    
+    public String getOutputDir() {
+        return outputDir;
+    }
+    
+    public void setOutputDir(String outputDir) {
+        this.outputDir = outputDir;
     }
 
     public String getTempOutputPath() {

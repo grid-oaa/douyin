@@ -84,7 +84,7 @@ public class RecordingManager {
      * @throws IllegalArgumentException 如果抖音号无效
      * @throws IllegalStateException 如果达到并发限制
      */
-    public RecordingTask createTask(String douyinId, boolean autoEnabled) {
+    public RecordingTask createTask(String douyinId, boolean autoEnabled, String outputDir) {
         if (douyinId == null || douyinId.trim().isEmpty()) {
             throw new IllegalArgumentException("抖音号不能为空");
         }
@@ -99,12 +99,13 @@ public class RecordingManager {
         // 创建新任务
         RecordingTask task = new RecordingTask(douyinId);
         task.setAutoEnabled(autoEnabled);
+        task.setOutputDir(outputDir);
         task.setStatus(TaskStatus.PENDING);
         
         // 存储任务
         taskMap.put(task.getTaskId(), task);
         
-        logger.info("创建录制任务: taskId={}, douyinId={}", task.getTaskId(), douyinId);
+        logger.info("创建录制任务: taskId={}, douyinId={}, outputDir={}", task.getTaskId(), douyinId, outputDir);
         appendTaskLog(task, "CREATED");
         
         return task;
@@ -345,13 +346,14 @@ public class RecordingManager {
             
             // 步骤3: 生成输出文件路径
             String filename = fileSystemManager.generateFilename(douyinId, LocalDateTime.now());
-            String outputPath = fileSystemManager.getFullPath(filename);
+            String outputDir = task.getOutputDir();
+            String outputPath = fileSystemManager.getFullPath(outputDir, filename);
             String tempOutputPath = replaceExtension(outputPath, ".flv");
             task.setOutputPath(outputPath);
             task.setTempOutputPath(tempOutputPath);
             
             // 确保存储目录存在
-            if (!fileSystemManager.ensureDirectory(fileSystemManager.getStoragePath())) {
+            if (!fileSystemManager.ensureDirectory(outputDir)) {
                 task.setStatus(TaskStatus.FAILED);
                 task.setError("无法创建存储目录");
                 logger.error("无法创建存储目录: taskId={}", taskId);

@@ -36,6 +36,7 @@ export interface RecordingStatus {
 export interface StartRecordingRequest {
   douyinId: string
   auto?: boolean
+  outputDir?: string
 }
 
 export interface UpdateCookieRequest {

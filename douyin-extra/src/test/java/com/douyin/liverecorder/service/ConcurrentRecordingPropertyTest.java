@@ -38,7 +38,7 @@ class ConcurrentRecordingPropertyTest {
             new Thread(() -> {
                 try {
                     startLatch.await();
-                    RecordingTask task = manager.createTask(douyinId, false);
+                    RecordingTask task = manager.createTask(douyinId, false, "D:\\recordings");
                     synchronized (createdTasks) {
                         createdTasks.add(task);
                     }
@@ -87,7 +87,7 @@ class ConcurrentRecordingPropertyTest {
 
         List<RecordingTask> tasks = new ArrayList<>();
         for (String douyinId : limitedDouyinIds) {
-            RecordingTask task = manager.createTask(douyinId, false);
+            RecordingTask task = manager.createTask(douyinId, false, "D:\\recordings");
             tasks.add(task);
         }
 
@@ -137,7 +137,7 @@ class ConcurrentRecordingPropertyTest {
             this.maxConcurrentTasks = maxConcurrentTasks;
         }
 
-        public RecordingTask createTask(String douyinId, boolean autoEnabled) {
+        public RecordingTask createTask(String douyinId, boolean autoEnabled, String outputDir) {
             if (douyinId == null || douyinId.trim().isEmpty()) {
                 throw new IllegalArgumentException("douyinId must not be blank");
             }
@@ -154,6 +154,7 @@ class ConcurrentRecordingPropertyTest {
 
             RecordingTask task = new RecordingTask(douyinId);
             task.setAutoEnabled(autoEnabled);
+            task.setOutputDir(outputDir);
             task.setStatus(TaskStatus.PENDING);
             taskMap.put(task.getTaskId(), task);
             return task;

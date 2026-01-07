@@ -13,6 +13,7 @@ public class StartRecordingRequest {
     @ValidDouyinId
     private String douyinId;
     private Boolean auto;
+    private String outputDir;
     
     public StartRecordingRequest() {
     }
@@ -40,5 +41,13 @@ public class StartRecordingRequest {
 
     public void setAuto(Boolean auto) {
         this.auto = auto;
+    }
+
+    public String getOutputDir() {
+        return outputDir;
+    }
+
+    public void setOutputDir(String outputDir) {
+        this.outputDir = outputDir;
     }
 }

@@ -4,6 +4,7 @@ import type { NormalizedError } from '../services/error'
 import { PollingController } from '../services/polling'
 import { isTerminalStatus } from '../constants/recording'
 import type { RecordingResponse, RecordingStatus } from '../types/recording'
+import { setLastOutputDir } from '../utils/storage'
 
 interface RecordingState {
   list: RecordingResponse[]
@@ -65,16 +66,21 @@ export const useRecordingStore = defineStore('recording', {
         this.setError(normalized.displayMessage)
       }
     },
-    async startRecording(douyinId: string, auto: boolean) {
+    async startRecording(douyinId: string, auto: boolean, outputDir: string) {
       this.setError(undefined)
+      if (!outputDir || !outputDir.trim()) {
+        this.setError('请选择保存目录')
+        return
+      }
       try {
-        const response = await apiStartRecording({ douyinId, auto })
+        const response = await apiStartRecording({ douyinId, auto, outputDir })
         this.list = [response, ...this.list.filter((item) => item.taskId !== response.taskId)]
         this.statusMap[response.taskId] = {
           taskId: response.taskId,
           status: response.status,
           error: response.error ?? null,
         }
+        setLastOutputDir(outputDir)
       } catch (error) {
         const normalized = error as NormalizedError
         this.setError(normalized.displayMessage)
